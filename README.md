@@ -1,3 +1,3 @@
 ### Hi there 👋
 
-*Full Stack developer: Java y Angular
+*Full Stack developer*: Java y Angular
