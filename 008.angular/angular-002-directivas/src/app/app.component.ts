@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
 import { Manufacturer } from './models/manufacturer.model';
 import { Product } from './models/product.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'angular-002-directivas';
+  title = 'Hola Mundo!';
 
   nombres: string[] = [
     'noemi', 'aitor', 'judith'
@@ -23,8 +24,8 @@ export class AppComponent {
       id: 1,
       title: 'produto 1',
       price: 49.99,
-      available: true,
-      publishDate: new Date(),
+      available: false,
+      publishDate: new Date(2015, 3, 15),
       manufacturer: {
         id: 1,
         name: 'Ford',
