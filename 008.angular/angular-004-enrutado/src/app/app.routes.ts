@@ -3,6 +3,7 @@ import { ManufacturerListComponent } from './manufacturer-list/manufacturer-list
 import { ProductListComponent } from './product-list/product-list.component';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 
 export const routes: Routes = [
@@ -23,6 +24,11 @@ export const routes: Routes = [
     {
         path: 'manufactures',
         component: ManufacturerListComponent
+
+    },
+    {
+        path: 'products/:id/detail',
+        component: ProductDetailComponent
 
     },
     // Dejar este enrutado al final del todo.

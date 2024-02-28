@@ -1,1 +1,11 @@
 <p>product-detail works!</p>
+
+@if(product) {
+    <p>{{product.id}}</p>
+    <p>{{product.title}}</p>
+} @else {
+   
+    <ngb-alert [dismissible]="false">
+        <strong>S O R R Y!</strong> No se ha encontrado el producto
+    </ngb-alert>
+}
