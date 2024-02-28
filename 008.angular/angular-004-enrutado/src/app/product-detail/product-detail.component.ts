@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Product } from '../models/product.model';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
+
 @Component({
   selector: 'app-product-detail',
   standalone: true,
@@ -11,6 +12,8 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './product-detail.component.css'
 })
 export class ProductDetailComponent implements OnInit {
+  
+  images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/900/500`);
 
   // producto
   product: Product | undefined;
@@ -37,7 +40,7 @@ export class ProductDetailComponent implements OnInit {
   //  };
 
   // Producto creado manualmente
-  /*
+  
   this.product = {
     id: 1,
     title: 'product1',
@@ -45,7 +48,7 @@ export class ProductDetailComponent implements OnInit {
     available: false,
     publishDate: new Date()
   };
-  */
+  
   });
 
 }
