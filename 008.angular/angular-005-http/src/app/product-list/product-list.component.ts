@@ -6,25 +6,22 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [HttpClientModule, RouterLink], // conectar el backend con frontend
+  imports: [HttpClientModule, RouterLink],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
-export class ProductListComponent implements OnInit {
-  
-  // atributos
+export class ProductListComponent implements OnInit{
+
   products: Product[] = []; // rellenar este array con productos del backend
 
-  // constructores
-  constructor(private http: HttpClient) {} // el constructor solo inyecta cosas
+  constructor(private http: HttpClient) {}
 
-  //métodos  
-  ngOnInit(): void {
-    
-    // traer los productos del backend 
-    //crea y ejecuta una petición HTTP contra un controlador Backend
-    let urlBackend= 'https://fakestoreapi.com/products'; // se puede usar el link JSON, ejemplo: http://localhost8080/users
-    this.http.get<Product[]>(urlBackend).subscribe(products => this.products = products);
+  ngOnInit(): void { // este método se ejecuta automáticamente cuando entras en la pantalla
+
+    // traer los productos del backend: crea y ejecuta una petición HTTP contra un controlador Backend
+    const backend = 'https://fakestoreapi.com/products';
+    this.http.get<Product[]>(backend).subscribe(products => this.products = products);
+
   }
 
 }
