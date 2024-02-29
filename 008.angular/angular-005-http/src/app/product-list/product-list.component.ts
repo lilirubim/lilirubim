@@ -1,11 +1,12 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../models/product.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [HttpClientModule], // conectar el backend con frontend
+  imports: [HttpClientModule, RouterLink], // conectar el backend con frontend
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })

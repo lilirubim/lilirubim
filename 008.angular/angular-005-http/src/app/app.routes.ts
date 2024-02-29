@@ -10,7 +10,7 @@ export const routes: Routes = [
 
     },
     {
-        path: 'products/:id/detail',
+        path: 'products/:id/detalle',
         component: ProductDetailComponent
 
     },
