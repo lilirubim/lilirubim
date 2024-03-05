@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { UserDetailComponent } from './user-detail/user-detail.component';
+
 
 export const routes: Routes = [
     {
-        path: 'products',
+        path: '',
         component: ProductListComponent
 
     },
@@ -14,9 +16,14 @@ export const routes: Routes = [
         component: ProductDetailComponent
 
     },
-    // Dejar este enrutado al final del todo.
     {
-        path: '**', //Ruta comodín, atrapa cualquier url no capturada anteriormente
-        component: NotFoundComponent   
+        path: 'users',
+        component: UserListComponent
+
+    },
+    {
+        path: 'users/:id/detalle',
+        component: UserDetailComponent
+
     }
 ];
