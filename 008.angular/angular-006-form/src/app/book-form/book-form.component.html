@@ -1,1 +1,46 @@
-<p>book-form works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+        
+
+<form [formGroup]="bookForm" (ngSubmit)="save()">
+    
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="title" 
+        placeholder="Angular avanzado" formControlName="title">
+        <label for="title">Título del libro</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="number" class="form-control" id="price" 
+        placeholder="price" formControlName="price" step="0.01">
+        <label for="title">Precio en (€)</label>
+    </div>
+
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" 
+        id="available" formControlName="available">
+        <label class="form-check-label" for="available" style="cursor:pointer;"> 
+            <!-- cursor:pointer hace la flecha cambiar para manito -->
+          Disponible para venta
+        </label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="datetime-local" class="form-control" id="publishDate" 
+            formControlName="publishDate">
+        <label for="publishDate">Fecha de publicación del libro</label>
+    </div>
+
+    <div>
+    <button class="btn btn-success" type="submit">Enviar</button>
+    <button class="btn btn-danger" type="submit">Cancelar</button>
+    </div>
+
+
+</form>
+</div>
+    </div>
+        </div>
