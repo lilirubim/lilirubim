@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Book } from '../models/book.model';
@@ -17,10 +17,12 @@ export class BookFormComponent {
     title: [''],
     price: [0.0],
     available: [false],
-    publishDate: [new Date()]
+    publishDate: [new Date()],
+    category: [],
+    topics: [[]] // array vacío
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private httpClient: HttpClient) {}
   save (){
     console.log("Guardando book");
 
@@ -30,6 +32,8 @@ export class BookFormComponent {
     const price = this.bookForm.get('price')?.value ?? 0.0;
     const available = this.bookForm.get('available')?.value ?? false;
     const publishDate = this.bookForm.get('publishDate')?.value ?? new Date;
+    const category = this.bookForm.get('category')?.value ?? 'category1';
+    const topics = this.bookForm.get('topics')?.value ?? [];
 
     // Crear un objeto utilizando los valores extraìdos
     const bookToSave: Book = {
@@ -37,12 +41,16 @@ export class BookFormComponent {
       title: title,
       price: price,
       available: available,
-      publishDate: publishDate
+      publishDate: publishDate,
+      category: '',
+      topics: []
     }
     console.log(bookToSave);
 
     // Enviar el objeto a backend utilizando HttpClient
-
-
+    /*
+    const url = 'http://localhost:8080/books';
+    this.httpClient.post<Book>(url, bookToSave).subscribe(book => console.log(book));
+    */
   }
 }
