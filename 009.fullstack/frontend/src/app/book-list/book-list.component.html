@@ -1,0 +1,8 @@
+@for (book of books; track book.id) {
+    <p>
+        <a [routerLink]="['/books', book.id,'detail']">{{book.id}}</a> {{book.isbn}} {{book.price}}
+    </p>
+
+}@empty {
+    <p>No hay libros.</p>
+}

@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Register } from '../models/register.model';
 
 @Component({
@@ -16,10 +16,23 @@ export class RegisterComponent {
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{9}$')]),
-    password: new FormControl('')
-  });
+    password: new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
+    passwordConfirm: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(30)])
+  },
+  {validators: this.passwordConfirmValidator} // Validador personalizado que comprueba dos campos al mismo tiempo
+  );
 
   constructor(private httpClient: HttpClient) {}
+
+  passwordConfirmValidator(control: AbstractControl) {
+    if (control.get('password')?.value === control.get('passwordConfirm')?.value) {
+      return null;
+    } else {
+      return{
+        'confirmError': true
+      }
+    }
+  }
 
   save() {
     const register: Register = {
