@@ -1,7 +1,8 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Book } from '../model/book.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-book-form',
@@ -10,7 +11,7 @@ import { Book } from '../model/book.model';
   templateUrl: './book-form.component.html',
   styleUrl: './book-form.component.css'
 })
-export class BookFormComponent {
+export class BookFormComponent implements OnInit {
 
   bookForm = this.fb.group({
     id: [0],
@@ -19,7 +20,27 @@ export class BookFormComponent {
   });
 
   constructor(private fb: FormBuilder,
-    private httpClient: HttpClient) {}
+    private httpClient: HttpClient,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
+
+    }
+
+  ngOnInit(): void {
+    this.activatedRoute.params.subscribe(params => {
+      const id = params['id'];
+      if(!id) return;
+
+      this.httpClient.get<Book>('http://localhost:8080/books/' + id).subscribe(bookFromBackend => {
+      // cargar el libro obtenido en el formulario bookForm
+      this.bookForm.reset({
+        id: bookFromBackend.id,
+        isbn: bookFromBackend.isbn,
+        price: bookFromBackend.price
+      });
+      });
+    });
+  }
 
     save() {
       // Opción 1: extraer los valores del formulario manualmente uno por uno
@@ -36,8 +57,19 @@ export class BookFormComponent {
 
       // Enviar a backend
       const url = 'http://localhost:8080/books';
-      this.httpClient.post(url, book).subscribe(bookFromBackend => {
+      this.httpClient.post<Book>(url, book).subscribe(bookFromBackend => {
         console.log(bookFromBackend);
+        
+        // uno o otro:
+        // navegar hacia el detail o el listado
+       // this.router.navigate(['/books']);
+
+
+        //navegar hacia detail
+        this.router.navigate(['/books', bookFromBackend.id, 'detail']);
+      }, error => {
+        console.log(error);
+        window.alert("Datos incorrectos")
       });
 
     }
