@@ -18,8 +18,12 @@ export class BookFormComponent implements OnInit {
     isbn: [''],
     price: [0.0]
   });
+ 
 
-  constructor(private fb: FormBuilder,
+  isUpdate: boolean = false; //por defecto estamos en CREAR no en ACTUALIZAR
+
+  constructor(
+    private fb: FormBuilder,
     private httpClient: HttpClient,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
@@ -38,30 +42,51 @@ export class BookFormComponent implements OnInit {
         isbn: bookFromBackend.isbn,
         price: bookFromBackend.price
       });
+
+      // marcar boolean true isUpdate
+      this.isUpdate = true;
+
       });
     });
   }
 
     save() {
       // Opción 1: extraer los valores del formulario manualmente uno por uno
+      /*
       const book: Book = {
         id: this.bookForm.get('id')?.value ?? 0,
         isbn: this.bookForm.get('isbn')?.value ?? '',
         price: this.bookForm.get('price')?.value ?? 0.0
       }
       console.log(book);
+      */
 
       // Opción 2: Crea objeto en una sola linea
-      const book2: Book = this.bookForm.value as Book;
-      console.log(book2);
+      const book: Book = this.bookForm.value as Book;
+      //console.log(book2);
+
+      if (this.isUpdate){
+        const url = 'http://localhost:8080/books/' + book.id;
+        this.httpClient.put<Book>(url, book).subscribe(bookFromBackend => {
+          this.router.navigate(['/books', bookFromBackend.id, 'detail' ]);
+        });
+      } else {
+        const url = 'http://localhost:8080/books';
+        this.httpClient.put<Book>(url, book).subscribe(bookFromBackend => {
+          this.router.navigate(['/books', bookFromBackend.id, 'detail' ]);
+        });
+      }
+    }
 
       // Enviar a backend
+      /*
       const url = 'http://localhost:8080/books';
       this.httpClient.post<Book>(url, book).subscribe(bookFromBackend => {
         console.log(bookFromBackend);
         
         // uno o otro:
         // navegar hacia el detail o el listado
+        //Opción 1
        // this.router.navigate(['/books']);
 
 
@@ -71,6 +96,7 @@ export class BookFormComponent implements OnInit {
         console.log(error);
         window.alert("Datos incorrectos")
       });
-
+      
     }
+    */
 }

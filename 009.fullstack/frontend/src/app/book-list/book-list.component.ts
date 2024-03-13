@@ -18,12 +18,14 @@ export class BookListComponent {
 
   ngOnInit(): void {
 
+    this.loadBooks();
+  }
+  delete(book: Book) {
+    const url = 'http://localhost:8080/books/' + book.id;
+    this.httpClient.delete(url).subscribe(response => this.loadBooks()); //recarga los libros despues de borrar
+  }
+  private loadBooks() {
     const url = 'http://localhost:8080/books';
-    this.httpClient.get<Book[]>(url)
-    .subscribe(books => {
-      console.log(books);
-      this.books = books;
-    });
-    
+    this.httpClient.get<Book[]>(url).subscribe(books => this.books = books);
   }
 }

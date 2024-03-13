@@ -3,7 +3,7 @@
         <a [routerLink]="['/books', book.id,'detail']">{{book.id}}</a> {{book.isbn}} {{book.price}}
         <button class="btn btn-info" [routerLink]="['/books', book.id, 'detail']">Ver Libro</button>
         <button class="btn btn-success" [routerLink]="['/books', book.id, 'update']">Editar Libro</button>
-        <button class="btn btn-danger" >Borrar Libro</button>
+        <button class="btn btn-danger" (click)="delete(book)" >Borrar Libro</button>
     </p>
 
 }@empty {
