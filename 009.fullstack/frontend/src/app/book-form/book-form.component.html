@@ -25,6 +25,19 @@
               <label for="price">Precio en euros (€)</label>
             </div>
             
+            <div class="form-floating">
+                <select class="form-select" id="author" formControlName="author" [compareWith]="compareObjects">
+                  <option selected>Selecionar autor/a</option>
+    
+                    <!-- iterar sobre el array de authors mostrando cada uno -->
+                  @for (author of authors; track author.id) {
+                    <option [ngValue]="author">{{author.fullName}}</option>
+                  }
+    
+                </select>
+                <label for="author">Autor/a del libro</label>
+              </div>
+            
             @if (isUpdate) {
                 <button class="btn btn-success" type="submit">Actualizar</button>
             } @else {

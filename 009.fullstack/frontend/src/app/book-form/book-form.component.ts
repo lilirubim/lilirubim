@@ -1,8 +1,9 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Book } from '../model/book.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Author } from '../model/author.model';
 
 @Component({
   selector: 'app-book-form',
@@ -13,90 +14,87 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BookFormComponent implements OnInit {
 
+  /*
   bookForm = this.fb.group({
     id: [0],
     isbn: [''],
-    price: [0.0]
+    price: [0.0],
+    author: this.fb.group({
+      id: [0],
+      fullName: [''],
+      country: [''],
+      active: [false]
+    })
   });
- 
+  */
+  bookForm = new FormGroup({
+    id: new FormControl<number>(0),
+    isbn: new FormControl<string>(''),
+    price: new FormControl<number>(0.0),
+    author: new FormControl()
+  });
 
-  isUpdate: boolean = false; //por defecto estamos en CREAR no en ACTUALIZAR
+  isUpdate: boolean = false; // por defecto estamos en CREAR no en ACTUALIZAR
+  authors: Author[] = []; // array de autores para asociar un autor al libro
 
   constructor(
-    private fb: FormBuilder,
-    private httpClient: HttpClient,
-    private router: Router,
-    private activatedRoute: ActivatedRoute) {
-
+      private fb: FormBuilder,
+      private httpClient: HttpClient,
+      private router: Router,
+      private activatedRoute: ActivatedRoute) {
     }
 
-  ngOnInit(): void {
-    this.activatedRoute.params.subscribe(params => {
-      const id = params['id'];
-      if(!id) return;
+    ngOnInit(): void {
+      // cargar autores de backend para el selector de autores en el formulario
+      this.httpClient.get<Author[]>('http://localhost:8080/authors')
+      .subscribe(authors => this.authors = authors);
 
-      this.httpClient.get<Book>('http://localhost:8080/books/' + id).subscribe(bookFromBackend => {
-      // cargar el libro obtenido en el formulario bookForm
-      this.bookForm.reset({
-        id: bookFromBackend.id,
-        isbn: bookFromBackend.isbn,
-        price: bookFromBackend.price
+      this.activatedRoute.params.subscribe(params => {
+        const id = params['id'];
+        if(!id) return;
+
+        this.httpClient.get<Book>('http://localhost:8080/books/' + id).subscribe(bookFromBackend => {
+          // cargar el libro obtenido en el formulario bookForm
+          this.bookForm.reset({
+            id: bookFromBackend.id,
+            isbn: bookFromBackend.isbn,
+            price: bookFromBackend.price,
+            author: bookFromBackend.author
+          });
+
+          // marcar boolean true isUpdate
+          this.isUpdate = true;
+
+        });
       });
+    }
 
-      // marcar boolean true isUpdate
-      this.isUpdate = true;
-
-      });
-    });
-  }
-
-    save() {
-      // Opción 1: extraer los valores del formulario manualmente uno por uno
-      /*
-      const book: Book = {
-        id: this.bookForm.get('id')?.value ?? 0,
-        isbn: this.bookForm.get('isbn')?.value ?? '',
-        price: this.bookForm.get('price')?.value ?? 0.0
-      }
-      console.log(book);
-      */
-
-      // Opción 2: Crea objeto en una sola linea
+    save () {
       const book: Book = this.bookForm.value as Book;
-      //console.log(book2);
+      console.log(book);
 
-      if (this.isUpdate){
+      if (this.isUpdate) {
         const url = 'http://localhost:8080/books/' + book.id;
         this.httpClient.put<Book>(url, book).subscribe(bookFromBackend => {
-          this.router.navigate(['/books', bookFromBackend.id, 'detail' ]);
+          this.router.navigate(['/books', bookFromBackend.id, 'detail']);
         });
+
       } else {
         const url = 'http://localhost:8080/books';
-        this.httpClient.put<Book>(url, book).subscribe(bookFromBackend => {
-          this.router.navigate(['/books', bookFromBackend.id, 'detail' ]);
+        this.httpClient.post<Book>(url, book).subscribe(bookFromBackend => {
+          this.router.navigate(['/books', bookFromBackend.id, 'detail']);
         });
       }
     }
 
-      // Enviar a backend
-      /*
-      const url = 'http://localhost:8080/books';
-      this.httpClient.post<Book>(url, book).subscribe(bookFromBackend => {
-        console.log(bookFromBackend);
-        
-        // uno o otro:
-        // navegar hacia el detail o el listado
-        //Opción 1
-       // this.router.navigate(['/books']);
+    compareObjects(o1: any, o2: any): boolean {
 
-
-        //navegar hacia detail
-        this.router.navigate(['/books', bookFromBackend.id, 'detail']);
-      }, error => {
-        console.log(error);
-        window.alert("Datos incorrectos")
-      });
       
+      if(o1 && o2) {
+        return o1.id === o2.id;
+      }
+      return o1 === o2;
     }
-    */
+
+
 }
