@@ -1,9 +1,8 @@
 
-@if (showDeleteBookMessage) {
-    <ngb-alert type="success" (closed) = "hideDeleteBookMessage()">Libro Borrado</ngb-alert>    
-    
-}
-
+<div class="container">
+    <div class="row">
+      <div class="col">
+<!--
 @for (book of books; track book.id) {
     <p>
         <a [routerLink]="['/books', book.id,'detail']">{{book.id}}</a> {{book.isbn}} {{book.price}}
@@ -15,3 +14,68 @@
 }@empty {
     <p>No hay libros.</p>
 }
+-->
+
+<h1 class="mt-5 mb-5">Listado de libros</h1>
+
+@if (showDeleteBookMessage) {
+    <ngb-alert type="success" (closed) = "hideDeleteBookMessage()">Libro Borrado</ngb-alert>    
+    
+}
+
+
+  
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Title</th>
+              <th scope="col">ISBN</th>
+              <th scope="col">Price (€)</th>
+              <th scope="col">Published </th>
+              <th scope="col">Release Date</th>
+              <th scope="col">Author </th>
+              <th scope="col">Editorial </th>
+              <th scope="col">Actions </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (book of books; track book.id) {
+              <tr>
+                <th scope="row">{{book.id}}</th>
+                <td>{{book.title}}</td>
+                <td>{{book.isbn}}</td>
+                <td>{{book.price}}</td>
+                <td>
+                  @if (book.published) {
+                    <span class="badge text-bg-success">Sí</span>
+                  } @else{
+                    <span class="badge text-bg-danger">No</span>
+                  }
+                </td>
+                <td>{{book.releaseDate | date: 'dd/MM/yy'}}</td>
+                <td>
+                    <a class="badge text-bg-warning text-decoration-none" [routerLink]="['/authors', book.author.id, 'detail']">
+                        {{book.author.fullName}}
+                    </a>
+                </td>
+                <td>
+                    <a class="badge text-bg-primary" [routerLink]="['/editorials', book.editorial.id, 'detail']">
+                        {{book.editorial.name}}
+                    </a>
+                </td>
+                <td>
+                    <button class="btn btn-info" [routerLink]="['/books', book.id, 'detail']">Ver Libro</button>
+                    <button class="btn btn-success ms-2" [routerLink]="['/books', book.id, 'update']">Editar Libro</button>
+                    <button class="btn btn-danger ms-2" (click)="delete(book)" >Borrar Libro</button>
+               
+                </td>
+              </tr>
+            }
+  
+          </tbody>
+        </table>
+        
+      </div>
+    </div>
+  </div>

@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
 import { Book } from '../model/book.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Author } from '../model/author.model';
+import { Editorial } from '../model/editorial.model';
 
 @Component({
   selector: 'app-book-form',
@@ -29,13 +30,18 @@ export class BookFormComponent implements OnInit {
   */
   bookForm = new FormGroup({
     id: new FormControl<number>(0),
+    title: new FormControl<string>(''),
     isbn: new FormControl<string>(''),
     price: new FormControl<number>(0.0),
-    author: new FormControl()
+    published: new FormControl<boolean>(false),
+    releaseDate: new   FormControl<Date>(new Date()),
+    author: new FormControl(),
+    editorial: new FormControl()
   });
 
   isUpdate: boolean = false; // por defecto estamos en CREAR no en ACTUALIZAR
   authors: Author[] = []; // array de autores para asociar un autor al libro
+  editorials: Editorial[] = [];
 
   constructor(
       private fb: FormBuilder,
@@ -48,6 +54,9 @@ export class BookFormComponent implements OnInit {
       // cargar autores de backend para el selector de autores en el formulario
       this.httpClient.get<Author[]>('http://localhost:8080/authors')
       .subscribe(authors => this.authors = authors);
+
+      this.httpClient.get<Editorial[]>('http://localhost:8080/editorials')
+      .subscribe(editorials => this.editorials = editorials);
 
       this.activatedRoute.params.subscribe(params => {
         const id = params['id'];
@@ -89,7 +98,7 @@ export class BookFormComponent implements OnInit {
 
     compareObjects(o1: any, o2: any): boolean {
 
-      
+
       if(o1 && o2) {
         return o1.id === o2.id;
       }
