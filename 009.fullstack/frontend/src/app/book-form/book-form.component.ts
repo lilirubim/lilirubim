@@ -34,7 +34,7 @@ export class BookFormComponent implements OnInit {
     isbn: new FormControl<string>(''),
     price: new FormControl<number>(0.0),
     published: new FormControl<boolean>(false),
-    releaseDate: new   FormControl<Date>(new Date()),
+    releaseDate: new FormControl<Date>(new Date()),
     author: new FormControl(),
     editorial: new FormControl()
   });
@@ -66,9 +66,13 @@ export class BookFormComponent implements OnInit {
           // cargar el libro obtenido en el formulario bookForm
           this.bookForm.reset({
             id: bookFromBackend.id,
+            title: bookFromBackend.title,
             isbn: bookFromBackend.isbn,
             price: bookFromBackend.price,
-            author: bookFromBackend.author
+            published: bookFromBackend.published,
+            releaseDate: bookFromBackend.releaseDate,
+            author: bookFromBackend.author,
+            editorial: bookFromBackend.editorial
           });
 
           // marcar boolean true isUpdate
@@ -96,8 +100,12 @@ export class BookFormComponent implements OnInit {
       }
     }
 
+    /*
+    Función para los selectores del formulario.
+    Permite precargar un objeto en un selector cuando se entra a editar en un formulario
+    */
     compareObjects(o1: any, o2: any): boolean {
-
+      // console.log("Comparando objetos: ", o1, o2);
 
       if(o1 && o2) {
         return o1.id === o2.id;
